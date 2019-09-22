@@ -3,14 +3,17 @@ package com.example;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
+enum Direction{
+	N,E,S,W
+}
 public class Rover {
 	private int x;
 	private int y;
-	private String direction;
+	private Direction direction;
 	private static int Max_x;
 	private static int Max_y;
 	
-	public Rover(int x, int y, String direction){
+	public Rover(int x, int y, Direction direction){
 		this.setX(x);
 		this.setY(y);
 		this.setDirection(direction);
@@ -31,7 +34,7 @@ public class Rover {
 				String[] lineValue = line.split(" ");
 				int x = Integer.parseInt(lineValue[0]);
 				int y = Integer.parseInt(lineValue[1]);
-				String direction = lineValue[2];
+				Direction direction = Direction.valueOf(lineValue[2]);
 				Rover rover= new Rover(x, y, direction);
 				line = br.readLine();
 				rover.move(line);
@@ -54,44 +57,28 @@ public class Rover {
 					movePosition();
 				}
 			}
+			System.out.println(this.x + " "+ this.y + " "+ this.direction);	
 		}else {
-			System.out.println("rover's origin position isn't correct");
-		}
-		System.out.println(this.x + " "+ this.y + " "+ this.direction);	
+			System.out.println("Rover's original position isn't correct for x = " + this.x + " and y = " + this.y + " and direction of: " + this.direction);
+		}	
 	}
 	
 	public void turnLeft() {
-		if(this.direction.equals("N")) {
-			this.direction = "W";			
-		}else if(this.direction.equals("S")) {
-			this.direction = "E";
-		}else if(this.direction.equals("W")) {
-			this.direction = "S";
-		}else if(this.direction.equals("E")) {
-			this.direction = "N";
-		}
+		this.direction = Direction.values()[((this.direction.ordinal()+3)%4)];
 	}
 	
 	public void turnRight() {
-		if(this.direction.equals("N")) {
-			this.direction = "E";
-		}else if(this.direction.equals("S")) {
-			this.direction = "W";
-		}else if(this.direction.equals("W")) {
-			this.direction = "N";
-		}else if(this.direction.equals("E")) {
-			this.direction = "S";
-		}
+		this.direction = Direction.values()[((this.direction.ordinal()+1)%4)];
 	}
 	
 	public void movePosition() {
-		if(this.direction.equals("N")) {
+		if(this.direction == Direction.valueOf("N")) {
 			this.y++;
-		}else if(this.direction.equals("S")) {
+		}else if(this.direction == Direction.valueOf("S")) {
 			this.y--;
-		}else if(this.direction.equals("W")) {
+		}else if(this.direction == Direction.valueOf("W")) {
 			this.x--;
-		}else if(this.direction.equals("E")) {
+		}else if(this.direction == Direction.valueOf("E")) {
 			this.x++;
 		}
 	}
@@ -119,11 +106,11 @@ public class Rover {
 		this.y = y;
 	}
 
-	public String getDirection() {
+	public Direction getDirection() {
 		return direction;
 	}
 
-	public void setDirection(String direction) {
+	public void setDirection(Direction direction) {
 		this.direction = direction;
 	}
 
